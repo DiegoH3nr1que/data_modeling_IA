@@ -155,11 +155,3 @@ Estamos desenvolvendo um agente de IA que será integrado a uma ampla gama de da
 3. **NF3:** O sistema deve ser eficiente e rápido, retornando as saídas no terminal ou gerando arquivos CSV dentro de tempos aceitáveis para o usuário.
     - **Prioridade:** P2 (Importante).
 
----
-
-# *Dependências*
-
-<aside>
-⚠️ Quais necessidades que precisam ser supridas para que este produto/feature seja desenvolvido?
-
-</aside>
