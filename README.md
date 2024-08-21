@@ -1,6 +1,5 @@
 # PRD - IA Generativa (Modelagem de banco de dados)
 
----
 
 # *Introdução & objetivo*
 
