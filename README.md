@@ -1,7 +1,5 @@
 # PRD - IA Generativa (Modelagem de banco de dados)
 
-# PRD - Product Requirements Document (Template)
-
 ---
 
 # *Introdução & objetivo*
