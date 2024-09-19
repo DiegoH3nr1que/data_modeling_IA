@@ -154,11 +154,99 @@ Estamos desenvolvendo um agente de IA que será integrado a uma ampla gama de da
       
 ## Novas implementações
 
-1. implementação para leitura de csv/script para realização do json.
+1. Implementação para leitura de csv/script para realização do json.
 
-2. leitura de json/csv/script e transformação em sql.
+2. Leitura de json/csv/script e transformação em sql.
 
-3. frontend para melhor utilização do usuário a nossa tool. 
+3. Frontend para melhorar utilização do usuário a nossa tool. 
 
 4. Documentar código para melhor entendimento das funcionalidades.
 
+## Exxemplos do modelo:
+1. Primeira processo: Geração do Modelo de dados com base no prompt.
+- Prompt: Uma biblioteca precisa gerenciar livros, autores e empréstimos. Os livros têm título, ISBN e ano de publicação. Os autores têm nome e nacionalidade. Os empréstimos registram qual livro foi emprestado, para qual membro da biblioteca e em que data.
+### Resultado:
+```Json
+{
+    "tables": [
+      {
+        "name": "Books",
+        "columns": [
+          {"name": "id", "type": "INT", "primary_key": true},
+          {"name": "title", "type": "VARCHAR(255)"},
+          {"name": "ISBN", "type": "VARCHAR(13)"},
+          {"name": "publication_year", "type": "INT"},
+          {"name": "author_name", "type": "VARCHAR(255)"}
+        ]
+      },
+      {
+        "name": "Authors",
+        "columns": [
+          {"name": "id", "type": "INT", "primary_key": true},
+          {"name": "name", "type": "VARCHAR(255)"},
+          {"name": "nationality", "type": "VARCHAR(100)"}
+        ]
+      },
+      {
+        "name": "Loans",
+        "columns": [
+          {"name": "id", "type": "INT", "primary_key": true},
+          {"name": "book_id", "type": "INT"},
+          {"name": "member_id", "type": "INT"},
+          {"name": "loan_date", "type": "DATE"},
+          {"name": "book_title", "type": "VARCHAR(255)"}
+        ]
+      }
+    ]
+}
+```
+---------------------
+2. Segundo processo: Análisar o próprio modelo de dados e devolver os pontos ao qual devem ser melhorar com base na aálise do modelo.
+### Resultado: "Em desenvolvimento..."
+-----------------------
+3. Terceiro processo: Prompt de mais informações para serem inseridas no modelo de dados/
+- Prompt: Adicionar um sistema de categorização para os livros, onde cada livro pode pertencer a múltiplas categorias (como ficção, não-ficção, romance, ciência). Também queremos rastrear o histórico de preços dos livros ao longo do tempo.
+### Resultado
+```Json
+{
+  "tables": [
+    {
+      "name": "Books",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "title", "type": "VARCHAR(255)"},
+        {"name": "ISBN", "type": "VARCHAR(13)"},
+        {"name": "publication_year", "type": "INT"},
+        {"name": "author_name", "type": "VARCHAR(255)"},
+        {"name": "category_id", "type": "INT"},
+        {"name": "price_history", "type": "TEXT"}
+      ]
+    },
+    {
+      "name": "Authors",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "name", "type": "VARCHAR(255)"},
+        {"name": "nationality", "type": "VARCHAR(100)"}
+      ]
+    },
+    {
+      "name": "Categories",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "category_name", "type": "VARCHAR(50)"}
+      ]
+    },
+    {
+      "name": "Loans",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "book_id", "type": "INT"},
+        {"name": "member_id", "type": "INT"},
+        {"name": "loan_date", "type": "DATE"},
+        {"name": "book_title", "type": "VARCHAR(255)"}
+      ]
+    }
+  ]
+}
+```
