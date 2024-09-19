@@ -151,4 +151,14 @@ Estamos desenvolvendo um agente de IA que será integrado a uma ampla gama de da
     - **Prioridade:** P1 (Crítico).
 3. **NF3:** O sistema deve ser eficiente e rápido, retornando as saídas no terminal ou gerando arquivos CSV dentro de tempos aceitáveis para o usuário.
     - **Prioridade:** P2 (Importante).
+      
+## Novas implementações
+
+1. implementação para leitura de csv/script para realização do json.
+
+2. leitura de json/csv/script e transformação em sql.
+
+3. frontend para melhor utilização do usuário a nossa tool. 
+
+4. Documentar código para melhor entendimento das funcionalidades.
 
