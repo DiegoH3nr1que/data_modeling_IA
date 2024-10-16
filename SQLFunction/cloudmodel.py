@@ -13,6 +13,9 @@ from sqlparse.tokens import Keyword, DDL
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # PRIMEIRO INSTANCIAR NO COLLAB
+# python -m streamlit run data_modeling_app.py (Para rodar o app).
+# Streamlit, graphviz, sqlparse, pandas
+
 NGROK_URL = "https://molly-crucial-kiwi.ngrok-free.app" #"(NGROK_LINK FREE APP)"
 
 def query_ollama(prompt):
