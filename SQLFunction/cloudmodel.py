@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 # python -m streamlit run data_modeling_app.py (Para rodar o app).
 # Streamlit, graphviz, sqlparse, pandas
 
-NGROK_URL = "https://molly-crucial-kiwi.ngrok-free.app" #"(NGROK_LINK FREE APP)"
+NGROK_URL = "https://conversely-precise-moray.ngrok-free.app" #"(NGROK_LINK FREE APP)"
 
 def query_ollama(prompt):
     headers = {
@@ -68,6 +68,23 @@ def optimize_data_structure(current_model):
     Retorne o resultado como uma string JSON, um esquema SQL e uma explicação em texto claro sobre as otimizações realizadas.
     """
     return query_ollama(prompt)
+
+def generate_complete_documentation():
+    """
+    Gera documentação automática baseada no histórico das funções chamadas.
+    """
+    if "history" not in st.session_state or not st.session_state.history:
+        return "Nenhuma ação foi registrada para gerar documentação."
+
+    documentation = "### Documentação Completa\\n"
+    for action in st.session_state.history:
+        documentation += f"#### {action['function_name']}\\n"
+        documentation += "**Entradas:**\\n"
+        documentation += f"```json\\n{json.dumps(action['inputs'], indent=2)}\\n```\\n"
+        documentation += "**Saídas:**\\n"
+        documentation += f"```json\\n{json.dumps(action['outputs'], indent=2)}\\n```\\n"
+    return documentation
+
 
 def adapt_to_changes(current_model, new_requirements):
     prompt = f"""
@@ -234,9 +251,13 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+if "history" not in st.session_state:
+    st.session_state.history = []
+
 
 action = st.selectbox("O que você gostaria de fazer?", 
-                      ["Selecionar uma ação", "Gerar modelo de dados", "Otimizar estrutura", "Adaptar a mudanças", "Gerar consultas SQL", "Executar esquema JSON", "Visualizar modelo de dados"])
+                      ["Selecionar uma ação", "Gerar modelo de dados", "Otimizar estrutura", "Adaptar a mudanças", "Gerar consultas SQL", "Executar esquema JSON", "Visualizar modelo de dados",
+        "Gerar documentação completa"])
 
 if action == "Gerar modelo de dados":
     input_option = st.selectbox("Como você gostaria de fornecer os dados?", ["Descrição", "JSON", "CSV"])
@@ -255,8 +276,20 @@ if action == "Gerar modelo de dados":
         if input_data:
             response = generate_data_model(input_data)
             st.session_state.messages.append({"role": "assistant", "content": response})
+            st.session_state.history.append({
+                "function_name": "generate_data_model",
+                "inputs": input_data,
+                "outputs": response
+            })
             with st.chat_message("assistant"):
                 st.markdown(response)
+
+
+elif action == "Gerar documentação completa":
+    if st.button("Gerar Documentação"):
+        documentation = generate_complete_documentation()
+        st.markdown(documentation)
+
 
 elif action == "Otimizar estrutura":
     current_model = st.text_area("Digite seu modelo de dados atual:", height=150)
@@ -264,8 +297,14 @@ elif action == "Otimizar estrutura":
         if current_model:
             response = optimize_data_structure(current_model)
             st.session_state.messages.append({"role": "assistant", "content": response})
+            st.session_state.history.append({
+                "function_name": "optimize_data_structure",
+                "inputs": current_model,
+                "outputs": response
+            })
             with st.chat_message("assistant"):
                 st.markdown(response)
+
 
 elif action == "Adaptar a mudanças":
     current_model = st.text_area("Digite seu modelo de dados atual:", height=150)
@@ -274,8 +313,17 @@ elif action == "Adaptar a mudanças":
         if current_model and new_requirements:
             response = adapt_to_changes(current_model, new_requirements)
             st.session_state.messages.append({"role": "assistant", "content": response})
+            st.session_state.history.append({
+                "function_name": "adapt_to_changes",
+                "inputs": {
+                    "current_model": current_model,
+                    "new_requirements": new_requirements
+                },
+                "outputs": response
+            })
             with st.chat_message("assistant"):
                 st.markdown(response)
+
 
 elif action == "Gerar consultas SQL":
     current_model = st.text_area("Digite seu modelo de dados atual:", height=150)
@@ -284,8 +332,17 @@ elif action == "Gerar consultas SQL":
         if current_model:
             response = generate_sql_queries(current_model, query_type)
             st.session_state.messages.append({"role": "assistant", "content": response})
+            st.session_state.history.append({
+                "function_name": "generate_sql_queries",
+                "inputs": {
+                    "current_model": current_model,
+                    "query_type": query_type
+                },
+                "outputs": response
+            })
             with st.chat_message("assistant"):
                 st.markdown(response)
+
 
 elif action == "Executar esquema JSON":
     schema_json = st.text_area("Digite o esquema JSON que deseja executar:", height=150)
@@ -294,8 +351,17 @@ elif action == "Executar esquema JSON":
         if schema_json and db_url:
             response = execute_schema(schema_json, db_url)
             st.session_state.messages.append({"role": "assistant", "content": response})
+            st.session_state.history.append({
+                "function_name": "execute_schema",
+                "inputs": {
+                    "schema_json": schema_json,
+                    "db_url": db_url
+                },
+                "outputs": response
+            })
             with st.chat_message("assistant"):
                 st.markdown(response)
+
 
 elif action == "Visualizar modelo de dados":
     input_option = st.selectbox("Como você gostaria de fornecer o modelo?", ["JSON", "SQL"])
