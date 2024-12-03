@@ -162,11 +162,15 @@ Estamos desenvolvendo um agente de IA que será integrado a uma ampla gama de da
 
 4. Documentar código para melhor entendimento das funcionalidades.
 
-## Exxemplos do modelo:
-1. Primeira processo: Geração do Modelo de dados com base no prompt.
-- Prompt: Uma biblioteca precisa gerenciar livros, autores e empréstimos. Os livros têm título, ISBN e ano de publicação. Os autores têm nome e nacionalidade. Os empréstimos registram qual livro foi emprestado, para qual membro da biblioteca e em que data.
-### Resultado:
-```Json
+## Exemplos do Modelo:
+
+### 1. Primeiro processo: Geração do Modelo de dados com base no prompt.
+
+- **Prompt:** Uma biblioteca precisa gerenciar livros, autores e empréstimos. Os livros têm título, ISBN e ano de publicação. Os autores têm nome e nacionalidade. Os empréstimos registram qual livro foi emprestado, para qual membro da biblioteca e em que data.
+
+**Resultado:**
+
+```json
 {
     "tables": [
       {
@@ -200,14 +204,66 @@ Estamos desenvolvendo um agente de IA que será integrado a uma ampla gama de da
     ]
 }
 ```
----------------------
-2. Segundo processo: Análisar o próprio modelo de dados e devolver os pontos ao qual devem ser melhorar com base na aálise do modelo.
-### Resultado: "Em desenvolvimento..."
------------------------
-3. Terceiro processo: Prompt de mais informações para serem inseridas no modelo de dados/
-- Prompt: Adicionar um sistema de categorização para os livros, onde cada livro pode pertencer a múltiplas categorias (como ficção, não-ficção, romance, ciência). Também queremos rastrear o histórico de preços dos livros ao longo do tempo.
-### Resultado
-```Json
+
+---
+
+### 2. Segundo processo: Análise do modelo de dados e sugestão de melhorias.
+
+- **Prompt:** Dado o seguinte modelo de dados, otimize-o para melhorar a eficiência, reduzir redundâncias e aumentar a integridade dos dados.
+
+**Resultado:**
+
+```json
+{
+  "tables": [
+    {
+      "name": "Books",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "title", "type": "VARCHAR(255)"},
+        {"name": "ISBN", "type": "VARCHAR(13)"},
+        {"name": "publication_year", "type": "INT"},
+        {"name": "author_id", "type": "INT"}
+      ],
+      "foreign_keys": [
+        {"column": "author_id", "references": {"table": "Authors", "column": "id"}}
+      ]
+    },
+    {
+      "name": "Authors",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "name", "type": "VARCHAR(255)"},
+        {"name": "nationality", "type": "VARCHAR(100)"}
+      ]
+    },
+    {
+      "name": "Loans",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "book_id", "type": "INT"},
+        {"name": "member_id", "type": "INT"},
+        {"name": "loan_date", "type": "DATE"}
+      ],
+      "foreign_keys": [
+        {"column": "book_id", "references": {"table": "Books", "column": "id"}}
+      ]
+    }
+  ]
+}
+```
+
+- O modelo otimizado elimina redundâncias, como o armazenamento direto de nomes de autores em "Books" (substituído por uma referência ao ID do autor na tabela "Authors"). Relacionamentos claros foram adicionados entre tabelas usando chaves estrangeiras.
+
+---
+
+### 3. Terceiro processo: Prompt de mais informações para serem inseridas no modelo de dados.
+
+- **Prompt:** Adicionar um sistema de categorização para os livros, onde cada livro pode pertencer a múltiplas categorias (como ficção, não-ficção, romance, ciência). Também queremos rastrear o histórico de preços dos livros ao longo do tempo.
+
+**Resultado:**
+
+```json
 {
   "tables": [
     {
@@ -249,4 +305,102 @@ Estamos desenvolvendo um agente de IA que será integrado a uma ampla gama de da
     }
   ]
 }
+```
+
+---
+
+### 4. Quarto processo: Visualização de modelos de dados.
+
+- **Prompt:** Dado um modelo de dados em formato JSON ou SQL, gere uma representação visual clara para entender as tabelas e seus relacionamentos.
+
+**Resultado:**
+
+- Uma imagem gráfica mostrando as tabelas como caixas e as colunas como elipses, conectadas por linhas para indicar relacionamentos entre elas.
+
+---
+
+### 5. Quinto processo: Adaptação de modelos a novos requisitos.
+
+- **Prompt:** Dado o modelo de dados atual e os seguintes novos requisitos:
+  - Exemplo de requisitos:
+    - Adicionar suporte para múltiplos endereços de autores.
+    - Associar livros a diferentes prêmios literários.
+
+**Resultado:**
+
+```json
+{
+  "tables": [
+    {
+      "name": "Addresses",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "author_id", "type": "INT"},
+        {"name": "address", "type": "VARCHAR(255)"}
+      ]
+    },
+    {
+      "name": "Awards",
+      "columns": [
+        {"name": "id", "type": "INT", "primary_key": true},
+        {"name": "book_id", "type": "INT"},
+        {"name": "award_name", "type": "VARCHAR(255)"},
+        {"name": "year", "type": "INT"}
+      ]
+    }
+  ]
+}
+```
+
+---
+
+### 6. Sexto processo: Geração de consultas SQL.
+
+- **Prompt:** Dado o modelo de dados atual, gere exemplos de consultas SQL do tipo "SELECT", "INSERT", "UPDATE" e "DELETE".
+
+**Resultado:**
+
+```sql
+-- SELECT
+SELECT * FROM Books WHERE publication_year > 2000;
+
+-- INSERT
+INSERT INTO Authors (name, nationality) VALUES ('Autor Exemplo', 'Brasileiro');
+
+-- UPDATE
+UPDATE Books SET title = 'Novo Título' WHERE id = 1;
+
+-- DELETE
+DELETE FROM Loans WHERE id = 10;
+```
+
+---
+
+### 7. Sétimo processo: Execução de esquema no banco de dados.
+
+- **Prompt:** Dado um esquema JSON e uma URL do banco de dados, execute as instruções no MongoDB e insira dados de amostra.
+
+**Resultado:**
+
+- Esquema executado com sucesso no MongoDB, com inserção de dados de exemplo nas coleções correspondentes.
+
+---
+
+### 8. Oitavo processo: Processamento de arquivos CSV.
+
+- **Prompt:** Dado um arquivo CSV, converta-o em um formato JSON para facilitar a manipulação e geração de modelos de dados.
+
+**Resultado:**
+
+```json
+[
+  {
+    "name": "Exemplo de Nome",
+    "value": 123
+  },
+  {
+    "name": "Outro Nome",
+    "value": 456
+  }
+]
 ```
